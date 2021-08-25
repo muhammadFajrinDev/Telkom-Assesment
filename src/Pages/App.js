@@ -94,11 +94,12 @@ function App() {
             <button type="button" class="btn btn-primary position-relative">
               Repositories
               <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-               10
+               {Repositories.length}
                 <span class="visually-hidden">unread messages</span>
               </span>
             </button>   
         </div>
+       
         </div>
         <div class="row mt-4">
           {
@@ -108,9 +109,8 @@ function App() {
                       <div class="card mt-3">   
                         <div class="card-body">
                           <h5 class="card-title">{data.name}</h5>
-                          <p class="card-text">{data.description == null ? '-' : data.description}</p>
-                          <button class="btn btn-success">Cloning Code</button>
-                          
+                          <p class="card-text"><small>{data.description == null ? '-' : data.description}</small></p>
+                          <p class="card-text text-danger "><b>{data.language == null ? 'Text' : data.language}</b></p>    
                         </div>
                       </div>
                 </div>
