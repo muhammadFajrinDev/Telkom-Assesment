@@ -1,8 +1,44 @@
-import { Fragment } from 'react';
+import { Fragment, useEffect, useState } from 'react';
+
 import './style.css';
 
+function API (url){
+  const promise = new Promise((resolve,reject)=>{ 
+      fetch(url)
+      .then(response => response.json())
+      .then(data => {
+          resolve(data)
+      }).catch(err=>{
+          reject(err)
+      })
+  })
+  return promise;
+}
 
 function App() {
+  
+  const [Repositories,setRepositories] = useState([]);
+  const [Profile,setProfile] = useState([]);
+
+  
+  useEffect(()=>{
+
+    API('https://api.github.com/users/muhammadFajrinDev')
+    .then((data)=>{
+      setProfile(data)
+    }).catch(err=>{
+       alert(err)
+    })
+
+    API("https://api.github.com/users/muhammadFajrinDev/repos")
+    .then((data)=>{
+      setRepositories(data)
+    }).catch(err=>{
+      alert(err)
+    })
+
+  },[])
+  
   return (
     <Fragment>
         <nav class="navbar navbar-dark bg-primary">
@@ -24,26 +60,29 @@ function App() {
                 <div class="row">
                   <div class="col-md-3 col-sm-3 ">
                       <h1 class="display-4">
-                            <img src="https://avatars.githubusercontent.com/u/68458175?v=4" class=" w-100 border" alt="..."/> 
+                            <img src={Profile.avatar_url} class=" w-100 border" alt="..."/> 
                       </h1>
                   </div>
                   <div class="col-md-9 col-sm-9 mt-3">
-                      <h3 class="card-title">Muhammad Fazrin Fahlevi  </h3>
+                      <h3 class="card-title">{Profile.name}</h3>
                       
                       <hr class="my-4"/>
                       
                       <p class="text-primary">
                         <h5>
-                            Software Developer
+                           {Profile.bio}
                         </h5>
                       </p>
 
-                      <p class="card-text w-75">Integrity Database Programmer in Technical Services Contract for Integrity and Management Corrosion Services - PT. Pertamina Hulu Energy ONWJ & Founder Semutware.com</p>
+                      <p class="card-text w-75">
+                          {Profile.company}
+                      </p>
+
                        <p class="card-text">
-                         <small class="text-muted">Jakarta - Indonesia</small>
+                         <small class="text-muted">{Profile.location}</small>
                        </p>
                        <p class="card-text">
-                          <a href="https://www.linkedin.com/in/mohammad-fajrin-fahlevi-4822911b9">https://www.linkedin.com/in/mohammad-fajrin-fahlevi-4822911b9</a>
+                          <a href={'https://'+Profile.blog}>{Profile.blog}</a>
                        </p>
                   </div>
                 </div>
@@ -55,68 +94,38 @@ function App() {
             <button type="button" class="btn btn-primary position-relative">
               Repositories
               <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                10
+               10
                 <span class="visually-hidden">unread messages</span>
               </span>
             </button>   
         </div>
         </div>
         <div class="row mt-4">
-            <div class="col-md-6">
-                  <div class="card">
-                    
-                    <div class="card-body">
-                      <h5 class="card-title">Live-Chat-Helpdesk-ONLY-CLIENT</h5>
-                      <p class="card-text">Live-Chat-Helpdesk-ONLY-CLIENT</p>
-                      <a href="#" class="btn btn-success">Cloning Code</a>
-                      
-                    </div>
-                  </div>
-            </div>
-            <div class="col-md-6">
-                  <div class="card">
-                    
-                    <div class="card-body">
-                      <h5 class="card-title">React-Native-Learn</h5>
-                      <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                      <a href="#" class="btn btn-success">Cloning Code</a>
-                    </div>
-                  </div>
-            </div>
-        </div>
-        <div class="row mt-3">
-            <div class="col-md-6">
-                  <div class="card">
-                    
-                    <div class="card-body">
-                      <h5 class="card-title">RedBuzz-Learn</h5>
-                      <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                      <a href="#" class="btn btn-success">Cloning Code</a>
-                    </div>
-                  </div>
-            </div>
-            <div class="col-md-6">
-                  <div class="card">
-                    
-                    <div class="card-body">
-                      <h5 class="card-title">Send-Order-Management-System</h5>
-                      <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                      <a href="#" class="btn btn-success">Cloning Code</a>
-                    </div>
-                  </div>
-            </div>
+          {
+            Repositories.map(data=>{
+                return(
+                <div class="col-md-6">
+                      <div class="card mt-3">   
+                        <div class="card-body">
+                          <h5 class="card-title">{data.name}</h5>
+                          <p class="card-text">{data.description == null ? '-' : data.description}</p>
+                          <button class="btn btn-success">Cloning Code</button>
+                          
+                        </div>
+                      </div>
+                </div>
+                )
+            })
+          }
+
         </div>
       </div>
-      {/* <footer class="footer mt-4 bg-primary">
-          <div class="container">
-             <a class="navbar-brand" href="https://www.semutware.com/">
-                <img src="https://github.githubassets.com/images/modules/logos_page/Octocat.png" alt="" width="40" height="35" class="d-inline-block align-text-top"/>
-                <span class="m-3">
-                  <a href="#" class="btn btn-primary stretched-link">Visit Semutware.com</a>
-                </span>
-              </a>
+      <footer class=" mt-4 bg-primary">
+          <div class="container content-footer">
+             <img src="https://github.githubassets.com/images/modules/logos_page/Octocat.png" alt="" width="40" height="35" class="d-inline-block align-text-top"/>
+              <a href="https://www.semutware.com/" class="link-light m-3 link-semut">Semutware.com</a>
           </div>
-      </footer> */}
+      </footer>
     </Fragment>
   );
 }

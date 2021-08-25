@@ -3,3 +3,14 @@ footer{
     display: flex;
     align-items: center;
 }
+
+.content-footer{
+    display: flex;
+    align-items: center;
+}
+
+.link-semut{
+    text-decoration: none;
+    padding: 10;
+    font-size: 16px;
+}
