@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useState } from 'react';
-
+import { Popover,OverlayTrigger,Button } from 'react-bootstrap';
 import './style.css';
 
 function API (url){
@@ -111,6 +111,21 @@ function App() {
                           <h5 class="card-title">{data.name}</h5>
                           <p class="card-text"><small>{data.description == null ? '-' : data.description}</small></p>
                           <p class="card-text text-danger "><b>{data.language == null ? 'Text' : data.language}</b></p>    
+                          <OverlayTrigger trigger="click" placement="right" overlay={
+                            (
+                              <Popover id="popover-basic">
+                                <Popover.Header as="h3">Clone</Popover.Header>
+                                <Popover.Body>
+                                  <strong>HTTPS</strong> : {data.clone_url}
+                                  <br></br>
+                                  <br></br>
+                                  <strong>SSH</strong> : {data.ssh_url}
+                                </Popover.Body>
+                              </Popover>
+                            )
+                          }>
+                            <Button variant="success">Code</Button>
+                          </OverlayTrigger>
                         </div>
                       </div>
                 </div>
